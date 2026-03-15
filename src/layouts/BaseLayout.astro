@@ -1,0 +1,68 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  currentPath?: string;
+}
+
+const {
+  title = 'Joe Fuqua',
+  description = 'Visual work by Joe Fuqua — watercolor, digital charcoal, AI art, and multimedia pieces made at the boundary between human and machine.',
+  currentPath = '',
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <title>{title === 'Joe Fuqua' ? 'Joe Fuqua · Art' : `${title} — Joe Fuqua`}</title>
+  <link rel="canonical" href={`https://joefuqua.art${currentPath}`} />
+  <link rel="icon" type="image/png" href="/logo.png" />
+</head>
+<body>
+
+  <header>
+    <a href="/" class="site-identity">
+      <div class="logo-mark">
+        <img src="/logo.png" alt="Joe Fuqua" />
+      </div>
+      <div>
+        <span class="site-name">Joe <span>Fuqua</span></span>
+        <span class="site-sub">Art &amp; Visual Work</span>
+      </div>
+    </a>
+    <nav>
+      <a href="/" class={currentPath === '/' ? 'active' : ''}>Gallery</a>
+      <a href="/?collection=watercolor">Watercolor</a>
+      <a href="/?collection=digital">Digital</a>
+      <a href="/?collection=ai">AI Art</a>
+      <a href="/?collection=multimedia">Multimedia</a>
+      <a href="/about" class={currentPath === '/about' ? 'active' : ''}>About</a>
+      <div class="nav-divider"></div>
+      <a href="https://joefuqua.blog" target="_blank" rel="noopener">Writing →</a>
+    </nav>
+  </header>
+
+  <main>
+    <slot />
+  </main>
+
+  <footer>
+    <div class="footer-left">Joe Fuqua · joefuqua.art · Charlotte, NC</div>
+    <div class="footer-links">
+      <a href="https://joefuqua.blog" target="_blank" rel="noopener">Writing</a>
+      <a href="https://contemplations.ai" target="_blank" rel="noopener">Contemplations</a>
+      <a href="https://linkedin.com/in/joefuqua" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://instagram.com/a.nod.tothe.odd" target="_blank" rel="noopener">@a.nod.tothe.odd</a>
+      <a href="https://instagram.com/the.dim.edge" target="_blank" rel="noopener">@the.dim.edge</a>
+      <a href="mailto:joe@joefuqua.blog">Prints &amp; Inquiries</a>
+    </div>
+  </footer>
+
+</body>
+</html>

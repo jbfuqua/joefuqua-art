@@ -1,0 +1,190 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { catalog, collectionLabels, getImagePath } from '../data/catalog';
+
+const counts = {
+  all: catalog.length,
+  watercolor: catalog.filter(a => a.collection === 'watercolor').length,
+  digital: catalog.filter(a => a.collection === 'digital').length,
+  ai: catalog.filter(a => a.collection === 'ai').length,
+  multimedia: catalog.filter(a => a.collection === 'multimedia').length,
+};
+
+const heroImages = catalog.map(a => getImagePath(a));
+---
+
+<BaseLayout currentPath="/">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-image">
+      <img id="hero-img" src={getImagePath(catalog[0])} alt="Featured artwork" />
+    </div>
+    <div class="hero-vignette"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Visual Work · Charlotte, NC</div>
+      <h1 class="hero-title">
+        Made by hand.<br/>
+        Made by algorithm.<br/>
+        <em>Made by whatever lives between.</em>
+      </h1>
+      <p class="hero-body">Watercolor impressionism. Digital charcoal. AI-generated horror and science fiction. And the space between — where digital becomes physical through ink, gel, and paint.</p>
+      <div class="hero-actions">
+        <a href="#gallery" class="btn-primary">View Gallery</a>
+        <a href="mailto:joe@joefuqua.blog" class="btn-ghost">Inquire About Prints</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLLECTION NAV -->
+  <div class="collection-nav" id="collection-nav">
+    <a href="#gallery" class="collection-tab active" data-col="all">
+      All<span class="collection-count">{counts.all}</span>
+    </a>
+    <a href="#gallery" class="collection-tab" data-col="watercolor">
+      Watercolor<span class="collection-count">{counts.watercolor}</span>
+    </a>
+    <a href="#gallery" class="collection-tab" data-col="digital">
+      Digital<span class="collection-count">{counts.digital}</span>
+    </a>
+    <a href="#gallery" class="collection-tab" data-col="ai">
+      AI Art<span class="collection-count">{counts.ai}</span>
+    </a>
+    <a href="#gallery" class="collection-tab" data-col="multimedia">
+      Multimedia<span class="collection-count">{counts.multimedia}</span>
+    </a>
+  </div>
+
+  <!-- GALLERY -->
+  <section class="gallery-section" id="gallery">
+    <div class="gallery-header">
+      <h2 class="gallery-title" id="gallery-title">All <em>Works</em></h2>
+      <span class="gallery-meta">Hover to explore · Click to enlarge</span>
+    </div>
+    <div class="gallery-grid">
+      {catalog.map(artwork => (
+        <div
+          class="art-card"
+          data-collection={artwork.collection}
+          data-slug={artwork.slug}
+          onclick={`openLightbox('${artwork.slug}')`}
+        >
+          <img
+            class="art-card-img"
+            src={getImagePath(artwork)}
+            alt={artwork.title}
+            loading="lazy"
+          />
+          <div class="art-card-info">
+            <div class="art-card-title">{artwork.title}</div>
+            <div class="art-card-meta">
+              <span>{collectionLabels[artwork.collection]} · {artwork.year}</span>
+              {artwork.available && <span class="art-card-available">Print available</span>}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox-overlay" id="lightbox">
+    <button class="lightbox-close" onclick="closeLightbox()">✕ Close</button>
+    <div class="lightbox-inner">
+      {catalog.map(artwork => (
+        <div class="lightbox-item" id={`lb-${artwork.slug}`} style="display:none;">
+          <img
+            class="lightbox-img"
+            src={getImagePath(artwork)}
+            alt={artwork.title}
+          />
+          <div class="lightbox-info">
+            <h2 class="lightbox-title">{artwork.title}</h2>
+            <p class="lightbox-medium">{artwork.medium} · {artwork.year}</p>
+            <p class="lightbox-desc">{artwork.desc}</p>
+            {artwork.available
+              ? <a href={`mailto:joe@joefuqua.blog?subject=Inquiry: ${artwork.title}`} class="btn-primary" style="font-size:0.6rem;padding:0.6rem 1.5rem;">Inquire About Print</a>
+              : <span style="font-family:var(--font-mono);font-size:0.55rem;color:var(--ink-faint);letter-spacing:0.1em;">Not currently available</span>
+            }
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+</BaseLayout>
+
+<script is:inline>
+  // Random hero image on load
+  const heroImages = ["/images/watercolor/sakura.jpg", "/images/watercolor/dc-rain.jpg", "/images/watercolor/fuji.jpg", "/images/watercolor/moon-and-mountain.jpg", "/images/watercolor/more-cows.jpg", "/images/watercolor/barn-and-field.jpg", "/images/watercolor/waterfall.jpg", "/images/digital/busy-day.jpg", "/images/digital/cafe-corner.jpg", "/images/digital/cafe-view.jpg", "/images/digital/farm-house.jpg", "/images/digital/ranson-farm.jpg", "/images/digital/farm-horses.jpg", "/images/digital/english-mansion.jpg", "/images/digital/ireland-harbor.jpg", "/images/multimedia/geisha.jpg", "/images/multimedia/fox.jpg", "/images/multimedia/hare.jpg", "/images/multimedia/welsh-hills.jpg", "/images/multimedia/homestead.jpg", "/images/multimedia/dragon-slayer.jpg", "/images/multimedia/ballerina.jpg", "/images/ai/robot-hobo.jpg", "/images/ai/space-propaganda.jpg", "/images/ai/appalachian-dead.jpg", "/images/ai/cyborg-girl.jpg", "/images/ai/medical-horror.jpg", "/images/ai/delivery-room.jpg", "/images/ai/looking-glass.jpg", "/images/ai/carnival-queen.jpg", "/images/ai/til-death.jpg"];
+  const heroImg = document.getElementById('hero-img');
+  if (heroImg && heroImages.length) {
+    heroImg.src = heroImages[Math.floor(Math.random() * heroImages.length)];
+  }
+
+  // Collection filtering
+  const titles = {
+    all: 'All <em>Works</em>',
+    watercolor: 'Watercolor <em>Works</em>',
+    digital: 'Digital <em>Drawings</em>',
+    ai: 'AI <em>Art</em>',
+    multimedia: 'Multimedia <em>Works</em>',
+  };
+
+  // Check URL param on load
+  const urlParams = new URLSearchParams(window.location.search);
+  const initCol = urlParams.get('collection') || 'all';
+  if (initCol !== 'all') {
+    filterCollection(initCol, false);
+  }
+
+  document.querySelectorAll('.collection-tab').forEach(tab => {
+    tab.addEventListener('click', e => {
+      e.preventDefault();
+      filterCollection(tab.dataset.col, true);
+    });
+  });
+
+  function filterCollection(col, scroll) {
+    document.querySelectorAll('.art-card').forEach(card => {
+      card.classList.toggle('hidden', col !== 'all' && card.dataset.collection !== col);
+    });
+    const titleEl = document.getElementById('gallery-title');
+    if (titleEl) titleEl.innerHTML = titles[col] || titles.all;
+    document.querySelectorAll('.collection-tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.col === col);
+    });
+    if (scroll) {
+      document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  // Lightbox
+  const slugs = Array.from(document.querySelectorAll('.art-card')).map(c => c.dataset.slug);
+
+  function openLightbox(slug) {
+    slugs.forEach(s => {
+      const el = document.getElementById('lb-' + s);
+      if (el) el.style.display = 'none';
+    });
+    const target = document.getElementById('lb-' + slug);
+    if (target) target.style.display = 'block';
+    document.getElementById('lightbox').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('lightbox').addEventListener('click', function(e) {
+    if (e.target === this) closeLightbox();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+</script>
+
+
