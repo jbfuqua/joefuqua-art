@@ -12,6 +12,13 @@ const {
   description = 'Visual work by Joe Fuqua — watercolor, digital charcoal, AI art, and multimedia pieces made at the boundary between human and machine.',
   currentPath = '',
 } = Astro.props;
+
+const sharedLinks = [
+  { href: 'https://joefuqua.com', label: 'Home' },
+  { href: 'https://joefuqua.blog', label: 'Writing' },
+  { href: 'https://joefuqua.art', label: 'Art' },
+  { href: 'https://joefuqua.com/about', label: 'About' },
+];
 ---
 
 <!DOCTYPE html>
@@ -27,25 +34,36 @@ const {
 <body>
 
   <header>
-    <a href="/" class="site-identity">
-      <div class="logo-mark">
-        <img src="/logo.png" alt="Joe Fuqua" />
-      </div>
-      <div>
-        <span class="site-name">Joe <span>Fuqua</span></span>
-        <span class="site-sub">Art &amp; Visual Work</span>
-      </div>
-    </a>
-    <nav>
-      <a href="/" class={currentPath === '/' ? 'active' : ''}>Gallery</a>
-      <a href="/?collection=watercolor">Watercolor</a>
-      <a href="/?collection=digital">Digital</a>
-      <a href="/?collection=ai">AI Art</a>
-      <a href="/?collection=multimedia">Multimedia</a>
-      <a href="/about" class={currentPath === '/about' ? 'active' : ''}>About</a>
-      <div class="nav-divider"></div>
-      <a href="https://joefuqua.blog" target="_blank" rel="noopener">Writing →</a>
-    </nav>
+    <div class="header-bar">
+      <a href="/" class="site-identity">
+        <div class="logo-mark">
+          <img src="/logo.png" alt="Joe Fuqua" />
+        </div>
+        <div>
+          <span class="site-name">Joe <span>Fuqua</span></span>
+          <span class="site-sub">Art &amp; Visual Work</span>
+        </div>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary">
+        {sharedLinks.map(({ href, label }) => (
+          <a href={href} class={href === 'https://joefuqua.art' ? 'active' : ''}>{label}</a>
+        ))}
+        <div class="nav-divider"></div>
+        <a href="/about" class={currentPath === '/about' ? 'active' : ''}>Artist Bio</a>
+      </nav>
+
+      <details class="mobile-nav">
+        <summary>Menu</summary>
+        <nav class="mobile-nav-panel" aria-label="Mobile">
+          {sharedLinks.map(({ href, label }) => (
+            <a href={href} class={href === 'https://joefuqua.art' ? 'active' : ''}>{label}</a>
+          ))}
+          <a href="/about" class={currentPath === '/about' ? 'active' : ''}>Artist Bio</a>
+          <a href="mailto:joe@joefuqua.blog">Prints &amp; Inquiries</a>
+        </nav>
+      </details>
+    </div>
   </header>
 
   <main>
@@ -53,13 +71,16 @@ const {
   </main>
 
   <footer>
-    <div class="footer-left">Joe Fuqua · joefuqua.art · Charlotte, NC</div>
+    <div class="footer-left">
+      <div class="footer-name">Joe Fuqua</div>
+      <div class="footer-tagline">Writing • Art • Essays on AI</div>
+    </div>
     <div class="footer-links">
-      <a href="https://joefuqua.blog" target="_blank" rel="noopener">Writing</a>
-      <a href="https://contemplations.ai" target="_blank" rel="noopener">Contemplations</a>
+      <a href="https://joefuqua.com" target="_blank" rel="noopener">joefuqua.com</a>
+      <a href="https://joefuqua.blog" target="_blank" rel="noopener">joefuqua.blog</a>
+      <a href="https://joefuqua.art" target="_blank" rel="noopener">joefuqua.art</a>
       <a href="https://linkedin.com/in/joefuqua" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="https://instagram.com/a.nod.tothe.odd" target="_blank" rel="noopener">@a.nod.tothe.odd</a>
-      <a href="https://instagram.com/the.dim.edge" target="_blank" rel="noopener">@the.dim.edge</a>
+      <a href="https://instagram.com/the.dim.edge" target="_blank" rel="noopener">Instagram</a>
       <a href="mailto:joe@joefuqua.blog">Prints &amp; Inquiries</a>
     </div>
   </footer>
