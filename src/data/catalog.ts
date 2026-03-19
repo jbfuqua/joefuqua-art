@@ -314,6 +314,14 @@ export const collectionTitles: Record<string, string> = {
   ai: 'AI Art',
 };
 
-export function getImagePath(artwork: Artwork): string {
-  return `/images/${artwork.collection}/${artwork.slug}.jpg`;
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/**/*.jpg',
+  { eager: true },
+);
+
+export function getImage(artwork: Artwork): ImageMetadata {
+  const path = `../assets/${artwork.collection}/${artwork.slug}.jpg`;
+  const img = images[path];
+  if (!img) throw new Error(`Image not found: ${path}`);
+  return img.default;
 }

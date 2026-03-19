@@ -1,6 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { catalog, collectionLabels, getImagePath } from '../data/catalog';
+import { catalog, collectionLabels, getImage } from '../data/catalog';
 
 const counts = {
   all: catalog.length,
@@ -10,7 +11,11 @@ const counts = {
   multimedia: catalog.filter(a => a.collection === 'multimedia').length,
 };
 
-const heroImages = catalog.map(a => getImagePath(a));
+// Pre-resolve all optimized image URLs for the client-side hero script
+const heroImageUrls = catalog.map(a => {
+  const img = getImage(a);
+  return img.src;
+});
 ---
 
 <BaseLayout currentPath="/">
@@ -18,7 +23,7 @@ const heroImages = catalog.map(a => getImagePath(a));
   <!-- HERO -->
   <section class="hero">
     <div class="hero-image">
-      <img id="hero-img" src={getImagePath(catalog[0])} alt="Featured artwork" />
+      <Image id="hero-img" src={getImage(catalog[0])} alt="Featured artwork" widths={[800, 1200, 1920]} format="webp" quality={80} />
     </div>
     <div class="hero-vignette"></div>
     <div class="hero-content">
@@ -69,10 +74,13 @@ const heroImages = catalog.map(a => getImagePath(a));
           data-slug={artwork.slug}
           onclick={`openLightbox('${artwork.slug}')`}
         >
-          <img
+          <Image
             class="art-card-img"
-            src={getImagePath(artwork)}
+            src={getImage(artwork)}
             alt={artwork.title}
+            widths={[400, 600]}
+            format="webp"
+            quality={80}
             loading="lazy"
           />
           <div class="art-card-info">
@@ -93,10 +101,13 @@ const heroImages = catalog.map(a => getImagePath(a));
     <div class="lightbox-inner">
       {catalog.map(artwork => (
         <div class="lightbox-item" id={`lb-${artwork.slug}`} style="display:none;">
-          <img
+          <Image
             class="lightbox-img"
-            src={getImagePath(artwork)}
+            src={getImage(artwork)}
             alt={artwork.title}
+            widths={[800, 1200]}
+            format="webp"
+            quality={85}
           />
           <div class="lightbox-info">
             <h2 class="lightbox-title">{artwork.title}</h2>
@@ -114,12 +125,11 @@ const heroImages = catalog.map(a => getImagePath(a));
 
 </BaseLayout>
 
-<script is:inline>
+<script is:inline define:vars={{ heroImageUrls }}>
   // Random hero image on load
-  const heroImages = ["/images/watercolor/sakura.jpg", "/images/watercolor/dc-rain.jpg", "/images/watercolor/fuji.jpg", "/images/watercolor/moon-and-mountain.jpg", "/images/watercolor/more-cows.jpg", "/images/watercolor/barn-and-field.jpg", "/images/watercolor/waterfall.jpg", "/images/digital/busy-day.jpg", "/images/digital/cafe-corner.jpg", "/images/digital/cafe-view.jpg", "/images/digital/farm-house.jpg", "/images/digital/ranson-farm.jpg", "/images/digital/farm-horses.jpg", "/images/digital/english-mansion.jpg", "/images/digital/ireland-harbor.jpg", "/images/multimedia/geisha.jpg", "/images/multimedia/fox.jpg", "/images/multimedia/hare.jpg", "/images/multimedia/welsh-hills.jpg", "/images/multimedia/homestead.jpg", "/images/multimedia/dragon-slayer.jpg", "/images/multimedia/ballerina.jpg", "/images/ai/robot-hobo.jpg", "/images/ai/space-propaganda.jpg", "/images/ai/appalachian-dead.jpg", "/images/ai/cyborg-girl.jpg", "/images/ai/medical-horror.jpg", "/images/ai/delivery-room.jpg", "/images/ai/looking-glass.jpg", "/images/ai/carnival-queen.jpg", "/images/ai/til-death.jpg"];
   const heroImg = document.getElementById('hero-img');
-  if (heroImg && heroImages.length) {
-    heroImg.src = heroImages[Math.floor(Math.random() * heroImages.length)];
+  if (heroImg && heroImageUrls.length) {
+    heroImg.src = heroImageUrls[Math.floor(Math.random() * heroImageUrls.length)];
   }
 
   // Collection filtering
