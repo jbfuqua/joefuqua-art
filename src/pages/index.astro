@@ -74,6 +74,7 @@ const heroImageUrls = catalog.map(a => {
           data-slug={artwork.slug}
           onclick={`openLightbox('${artwork.slug}')`}
         >
+          {artwork.available && <span class="art-card-badge">Print Available</span>}
           <Image
             class="art-card-img"
             src={getImage(artwork)}
@@ -114,8 +115,8 @@ const heroImageUrls = catalog.map(a => {
             <p class="lightbox-medium">{artwork.medium} · {artwork.year}</p>
             <p class="lightbox-desc">{artwork.desc}</p>
             {artwork.available
-              ? <a href={`mailto:joe@joefuqua.blog?subject=Inquiry: ${artwork.title}`} class="btn-primary" style="font-size:0.6rem;padding:0.6rem 1.5rem;">Inquire About Print</a>
-              : <span style="font-family:var(--font-mono);font-size:0.55rem;color:var(--ink-faint);letter-spacing:0.1em;">Not currently available</span>
+              ? <a href={`mailto:joe@joefuqua.blog?subject=Inquiry: ${artwork.title}`} class="btn-primary lightbox-cta">Inquire About Print</a>
+              : <span class="lightbox-unavailable">Not currently available</span>
             }
           </div>
         </div>
