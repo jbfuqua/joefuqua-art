@@ -5,13 +5,18 @@ interface Props {
   title?: string;
   description?: string;
   currentPath?: string;
+  ogImage?: string;
 }
 
 const {
   title = 'Joe Fuqua',
   description = 'Visual work by Joe Fuqua — watercolor, digital charcoal, AI art, and multimedia pieces made at the boundary between human and machine.',
   currentPath = '',
+  ogImage,
 } = Astro.props;
+
+const displayTitle = title === 'Joe Fuqua' ? 'Joe Fuqua · Art' : `${title} — Joe Fuqua`;
+const canonicalUrl = `https://joefuqua.art${currentPath}`;
 
 const sharedLinks = [
   { href: 'https://joefuqua.com', label: 'Home' },
@@ -27,9 +32,17 @@ const sharedLinks = [
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content={description} />
-  <title>{title === 'Joe Fuqua' ? 'Joe Fuqua · Art' : `${title} — Joe Fuqua`}</title>
-  <link rel="canonical" href={`https://joefuqua.art${currentPath}`} />
+  <title>{displayTitle}</title>
+  <link rel="canonical" href={canonicalUrl} />
   <link rel="icon" type="image/png" href="/logo.png" />
+  <meta property="og:title" content={displayTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:type" content="website" />
+  {ogImage && <meta property="og:image" content={ogImage} />}
+  <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+  <meta name="twitter:title" content={displayTitle} />
+  <meta name="twitter:description" content={description} />
 </head>
 <body>
 

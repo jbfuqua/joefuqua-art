@@ -16,9 +16,12 @@ const heroImageUrls = catalog.map(a => {
   const img = getImage(a);
   return img.src;
 });
+
+// Use geisha piece as the OG image (vivid, representative)
+const ogImageSrc = getImage(catalog.find(a => a.slug === 'geisha')!).src;
 ---
 
-<BaseLayout currentPath="/">
+<BaseLayout currentPath="/" ogImage={`https://joefuqua.art${ogImageSrc}`}>
 
   <!-- HERO -->
   <section class="hero">
