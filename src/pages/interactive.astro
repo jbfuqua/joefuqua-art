@@ -1,0 +1,140 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const pieces = [
+  {
+    slug: 'particle-art4',
+    title: 'Particle Worlds',
+    year: '2026',
+    medium: 'WebGL2 · JavaScript',
+    desc: 'Generative particle systems rendered in real-time — spiral galaxies, jellyfish blooms, solar flares, and more. Eight scenes with seven color palettes, smooth transitions, and recording support.',
+    url: 'https://jbfuqua.github.io/particle-art4/',
+    preview: '/video/solar-bloom-poster.jpg',
+  },
+];
+---
+
+<BaseLayout title="Interactive Art" currentPath="/interactive">
+
+  <section class="interactive-hero">
+    <div class="interactive-hero-content">
+      <div class="hero-eyebrow">Interactive · Generative · Code</div>
+      <h1 class="hero-title">
+        Things that <em>move.</em>
+      </h1>
+      <p class="hero-body">Generative art, particle systems, and interactive experiments — built with code, rendered in the browser.</p>
+    </div>
+  </section>
+
+  <section class="interactive-section" id="interactive">
+    <div class="interactive-grid">
+      {pieces.map(piece => (
+        <a class="interactive-card" href={piece.url} target="_blank" rel="noopener">
+          <div class="interactive-card-preview">
+            <img src={piece.preview} alt={piece.title} loading="lazy" />
+            <div class="interactive-card-play">Launch</div>
+          </div>
+          <div class="interactive-card-info">
+            <h2 class="interactive-card-title">{piece.title}</h2>
+            <div class="interactive-card-meta">{piece.medium} · {piece.year}</div>
+            <p class="interactive-card-desc">{piece.desc}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .interactive-hero {
+    padding: calc(var(--header-offset) + 4rem) 3rem 4rem;
+    border-bottom: 1px solid rgba(80,72,64,0.2);
+  }
+  .interactive-hero-content { max-width: 600px; }
+
+  .interactive-section { padding: 4rem 3rem; }
+
+  .interactive-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 2rem;
+  }
+
+  .interactive-card {
+    background: var(--surface);
+    text-decoration: none;
+    color: var(--ink);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: block;
+  }
+  .interactive-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+
+  .interactive-card-preview {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1;
+  }
+  .interactive-card-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s;
+  }
+  .interactive-card:hover .interactive-card-preview img {
+    transform: scale(1.05);
+  }
+
+  .interactive-card-play {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-label);
+    font-size: 0.7rem;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: rgba(196, 98, 45, 0.85);
+    padding: 0.8rem 2rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+    backdrop-filter: blur(4px);
+  }
+  .interactive-card:hover .interactive-card-play { opacity: 1; }
+
+  .interactive-card-info { padding: 1.5rem; }
+
+  .interactive-card-title {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 300;
+    margin-bottom: 0.4rem;
+  }
+
+  .interactive-card-meta {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    color: var(--teal-light);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .interactive-card-desc {
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: var(--ink-mid);
+    line-height: 1.8;
+  }
+
+  @media (max-width: 600px) {
+    .interactive-hero { padding: calc(var(--header-offset) + 2rem) 1.5rem 2rem; }
+    .interactive-section { padding: 2rem 1.5rem; }
+    .interactive-grid { grid-template-columns: 1fr; }
+  }
+</style>

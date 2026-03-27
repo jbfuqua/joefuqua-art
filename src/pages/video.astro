@@ -1,0 +1,182 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const videos = [
+  {
+    slug: 'solar-bloom',
+    title: 'Solar Bloom',
+    year: '2026',
+    medium: 'Generative particle art',
+    desc: 'A pulsing star rendered in real-time — particles erupt in coronal flares and collapse back into the surface.',
+  },
+  {
+    slug: 'the-elders',
+    title: 'The Elders',
+    year: '2024',
+    medium: 'AI-generated video',
+    desc: 'Colossal root-creatures loom over a wasted landscape. A man stands in the dust and stares up. They do not notice.',
+  },
+  {
+    slug: 'the-twins',
+    title: 'The Twins',
+    year: '2024',
+    medium: 'AI-generated video',
+    desc: 'A daguerreotype that should not exist. Two figures, mouths open, teeth wrong. The silver plate holds them still.',
+  },
+  {
+    slug: 'plague-court',
+    title: 'Plague Court',
+    year: '2024',
+    medium: 'AI-generated video',
+    desc: 'A Renaissance court procession — the queen advances, her court in rot and velvet. Nobody leaves this ballroom.',
+  },
+  {
+    slug: 'interface',
+    title: 'Interface',
+    year: '2024',
+    medium: 'AI-generated video',
+    desc: 'A face wired open, smiling through the circuitry. The boundary between person and machine is a question nobody asks anymore.',
+  },
+  {
+    slug: 'coastal-station',
+    title: 'Coastal Station',
+    year: '2024',
+    medium: 'AI-generated video',
+    desc: 'A retro-futurist outpost perched above the Mediterranean. The alien in yellow has been waiting a very long time.',
+  },
+  {
+    slug: 'geisha-process-1',
+    title: 'Geisha with Katana',
+    year: '2025',
+    medium: 'Animated gel print & watercolor',
+    desc: 'A gel print and watercolor piece brought to life — the katana-wielding geisha animated from the original artwork.',
+  },
+];
+---
+
+<BaseLayout title="Video Art" currentPath="/video">
+
+  <section class="video-hero">
+    <div class="video-hero-content">
+      <div class="hero-eyebrow">Video · Motion · Process</div>
+      <h1 class="hero-title">
+        Things that <em>breathe.</em>
+      </h1>
+      <p class="hero-body">AI-generated horror, generative art recordings, and process videos from the studio. Best viewed with sound.</p>
+    </div>
+  </section>
+
+  <section class="video-section" id="video">
+    <div class="video-grid">
+      {videos.map(v => (
+        <div class="video-card">
+          <div class="video-card-player">
+            <video
+              src={`/video/${v.slug}.mp4`}
+              poster={`/video/${v.slug}-poster.jpg`}
+              preload="none"
+              loop
+              muted
+              playsinline
+              onclick="this.paused ? this.play() : this.pause()"
+            />
+            <div class="video-card-play-hint">Tap to play</div>
+          </div>
+          <div class="video-card-info">
+            <h2 class="video-card-title">{v.title}</h2>
+            <div class="video-card-meta">{v.medium} · {v.year}</div>
+            <p class="video-card-desc">{v.desc}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+</BaseLayout>
+
+<script is:inline>
+  document.querySelectorAll('.video-card video').forEach(video => {
+    const hint = video.parentElement.querySelector('.video-card-play-hint');
+    video.addEventListener('play', () => { if (hint) hint.style.opacity = '0'; });
+    video.addEventListener('pause', () => { if (hint) hint.style.opacity = '1'; });
+  });
+</script>
+
+<style>
+  .video-hero {
+    padding: calc(var(--header-offset) + 4rem) 3rem 4rem;
+    border-bottom: 1px solid rgba(80,72,64,0.2);
+  }
+  .video-hero-content { max-width: 600px; }
+
+  .video-section { padding: 4rem 3rem; }
+
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+  }
+
+  .video-card {
+    background: var(--surface);
+    overflow: hidden;
+  }
+
+  .video-card-player {
+    position: relative;
+    cursor: pointer;
+    background: #000;
+  }
+  .video-card-player video {
+    width: 100%;
+    display: block;
+  }
+
+  .video-card-play-hint {
+    position: absolute;
+    bottom: 1rem; left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-label);
+    font-size: 0.6rem;
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: rgba(0,0,0,0.6);
+    padding: 0.5rem 1.2rem;
+    backdrop-filter: blur(4px);
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .video-card-info { padding: 1.5rem; }
+
+  .video-card-title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 300;
+    margin-bottom: 0.3rem;
+  }
+
+  .video-card-meta {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    color: var(--teal-light);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+
+  .video-card-desc {
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: var(--ink-mid);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 600px) {
+    .video-hero { padding: calc(var(--header-offset) + 2rem) 1.5rem 2rem; }
+    .video-section { padding: 2rem 1.5rem; }
+    .video-grid { grid-template-columns: 1fr; }
+  }
+</style>
