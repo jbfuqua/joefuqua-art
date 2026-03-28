@@ -63,8 +63,6 @@ const sharedLinks = [
           <a href={href} class={href === 'https://joefuqua.art' ? 'active' : ''}>{label}</a>
         ))}
         <div class="nav-divider"></div>
-        <a href="/interactive" class={currentPath === '/interactive' ? 'active' : ''}>Interactive</a>
-        <a href="/video" class={currentPath === '/video' ? 'active' : ''}>Video</a>
         <a href="/about" class={currentPath === '/about' ? 'active' : ''}>Artist Bio</a>
       </nav>
 
@@ -74,8 +72,6 @@ const sharedLinks = [
           {sharedLinks.map(({ href, label }) => (
             <a href={href} class={href === 'https://joefuqua.art' ? 'active' : ''}>{label}</a>
           ))}
-          <a href="/interactive" class={currentPath === '/interactive' ? 'active' : ''}>Interactive</a>
-          <a href="/video" class={currentPath === '/video' ? 'active' : ''}>Video</a>
           <a href="/about" class={currentPath === '/about' ? 'active' : ''}>Artist Bio</a>
           <a href="mailto:joe@joefuqua.blog">Prints &amp; Inquiries</a>
         </nav>
