@@ -99,6 +99,29 @@ const ogImageSrc = getImage(catalog.find(a => a.slug === 'geisha')!).src;
           </div>
         </div>
       ))}
+
+      <!-- Video pieces -->
+      <div class="art-card video-card-home" data-collection="video">
+        <div class="video-player-home">
+          <video src="/video/solar-bloom.mp4" poster="/video/solar-bloom-poster.jpg" preload="none" loop muted playsinline />
+          <div class="video-hint-home">Tap to play</div>
+        </div>
+        <div class="art-card-info" style="opacity:1;transform:none;position:relative;">
+          <div class="art-card-title">Solar Bloom</div>
+          <div class="art-card-meta"><span>Generative particle art · 2026</span></div>
+        </div>
+      </div>
+
+      <div class="art-card video-card-home" data-collection="video">
+        <div class="video-player-home">
+          <video src="/video/the-elders.mp4" poster="/video/the-elders-poster.jpg" preload="none" loop muted playsinline />
+          <div class="video-hint-home">Tap to play</div>
+        </div>
+        <div class="art-card-info" style="opacity:1;transform:none;position:relative;">
+          <div class="art-card-title">The Elders</div>
+          <div class="art-card-meta"><span>AI-generated video · 2024</span></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -223,5 +246,47 @@ const ogImageSrc = getImage(catalog.find(a => a.slug === 'geisha')!).src;
     if (e.key === 'ArrowRight') navLightbox(1);
     if (e.key === 'ArrowLeft') navLightbox(-1);
   });
+
+  // Video cards — tap to play
+  document.querySelectorAll('.video-card-home').forEach(wrap => {
+    const video = wrap.querySelector('video');
+    const hint = wrap.querySelector('.video-hint-home');
+    const player = wrap.querySelector('.video-player-home');
+    if (!video || !player) return;
+    player.addEventListener('click', () => {
+      if (video.paused) { video.play(); } else { video.pause(); }
+    });
+    video.addEventListener('play', () => { if (hint) hint.style.opacity = '0'; });
+    video.addEventListener('pause', () => { if (hint) hint.style.opacity = '1'; });
+  });
 </script>
+
+<style>
+  .video-card-home::after { display: none; }
+  .video-player-home {
+    position: relative;
+    cursor: pointer;
+    background: #000;
+  }
+  .video-player-home video {
+    width: 100%;
+    display: block;
+  }
+  .video-hint-home {
+    position: absolute;
+    bottom: 1rem; left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-label);
+    font-size: 0.6rem;
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: rgba(0,0,0,0.6);
+    padding: 0.5rem 1.2rem;
+    backdrop-filter: blur(4px);
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+</style>
 
