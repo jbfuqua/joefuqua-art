@@ -46,24 +46,24 @@ const ogImageSrc = getImage(catalog.find(a => a.slug === 'geisha')!).src;
 
   <!-- COLLECTION NAV -->
   <div class="collection-nav" id="collection-nav">
-    <a href="#gallery" class="collection-tab active" data-col="all">
+    <a href="/#gallery" class="collection-tab active" data-col="all">
       All<span class="collection-count">{counts.all}</span>
     </a>
-    <a href="#gallery" class="collection-tab" data-col="watercolor">
+    <a href="/?collection=watercolor#gallery" class="collection-tab" data-col="watercolor">
       Watercolor<span class="collection-count">{counts.watercolor}</span>
     </a>
-    <a href="#gallery" class="collection-tab" data-col="digital">
+    <a href="/?collection=digital#gallery" class="collection-tab" data-col="digital">
       Digital<span class="collection-count">{counts.digital}</span>
     </a>
-    <a href="#gallery" class="collection-tab" data-col="ai">
+    <a href="/?collection=ai#gallery" class="collection-tab" data-col="ai">
       AI Art<span class="collection-count">{counts.ai}</span>
     </a>
-    <a href="#gallery" class="collection-tab" data-col="multimedia">
+    <a href="/?collection=multimedia#gallery" class="collection-tab" data-col="multimedia">
       Multimedia<span class="collection-count">{counts.multimedia}</span>
     </a>
     <div class="nav-divider" style="width:1px;height:16px;background:var(--ink-faint);opacity:0.4;align-self:center;flex-shrink:0;"></div>
-    <a href="/interactive" class="collection-tab collection-link">Interactive</a>
-    <a href="/video" class="collection-tab collection-link">Video</a>
+    <a href="/interactive" class="collection-tab">Interactive</a>
+    <a href="/video" class="collection-tab">Video</a>
   </div>
 
   <!-- GALLERY -->
@@ -157,8 +157,7 @@ const ogImageSrc = getImage(catalog.find(a => a.slug === 'geisha')!).src;
     filterCollection(initCol, false);
   }
 
-  document.querySelectorAll('.collection-tab').forEach(tab => {
-    if (tab.classList.contains('collection-link')) return; // let these navigate normally
+  document.querySelectorAll('.collection-tab[data-col]').forEach(tab => {
     tab.addEventListener('click', e => {
       e.preventDefault();
       filterCollection(tab.dataset.col, true);
