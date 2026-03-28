@@ -104,7 +104,6 @@ const videos = [
               loop
               muted
               playsinline
-              onclick="this.paused ? this.play() : this.pause()"
             />
             <div class="video-play-hint">Tap to play</div>
           </div>
@@ -122,8 +121,14 @@ const videos = [
 </BaseLayout>
 
 <script is:inline>
-  document.querySelectorAll('.video-card-wrap video').forEach(video => {
-    const hint = video.parentElement.querySelector('.video-play-hint');
+  document.querySelectorAll('.video-card-wrap').forEach(wrap => {
+    const video = wrap.querySelector('video');
+    const hint = wrap.querySelector('.video-play-hint');
+    const player = wrap.querySelector('.video-player');
+    if (!video || !player) return;
+    player.addEventListener('click', () => {
+      if (video.paused) { video.play(); } else { video.pause(); }
+    });
     video.addEventListener('play', () => { if (hint) hint.style.opacity = '0'; });
     video.addEventListener('pause', () => { if (hint) hint.style.opacity = '1'; });
   });
@@ -157,5 +162,8 @@ const videos = [
   }
   .video-card-wrap .art-card-info {
     padding: 1rem 0.5rem;
+  }
+  .video-card-wrap::after {
+    display: none;
   }
 </style>
