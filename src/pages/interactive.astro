@@ -1,5 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { catalog } from '../data/catalog';
+
+const counts = {
+  all: catalog.length,
+  watercolor: catalog.filter(a => a.collection === 'watercolor').length,
+  digital: catalog.filter(a => a.collection === 'digital').length,
+  ai: catalog.filter(a => a.collection === 'ai').length,
+  multimedia: catalog.filter(a => a.collection === 'multimedia').length,
+};
 
 const pieces = [
   {
@@ -18,7 +27,22 @@ const pieces = [
 
   <!-- COLLECTION NAV -->
   <div class="collection-nav" style="margin-top: var(--header-offset);">
-    <a href="/" class="collection-tab">Gallery</a>
+    <a href="/" class="collection-tab">
+      All<span class="collection-count">{counts.all}</span>
+    </a>
+    <a href="/?collection=watercolor" class="collection-tab">
+      Watercolor<span class="collection-count">{counts.watercolor}</span>
+    </a>
+    <a href="/?collection=digital" class="collection-tab">
+      Digital<span class="collection-count">{counts.digital}</span>
+    </a>
+    <a href="/?collection=ai" class="collection-tab">
+      AI Art<span class="collection-count">{counts.ai}</span>
+    </a>
+    <a href="/?collection=multimedia" class="collection-tab">
+      Multimedia<span class="collection-count">{counts.multimedia}</span>
+    </a>
+    <div class="nav-divider" style="width:1px;height:16px;background:var(--ink-faint);opacity:0.4;align-self:center;flex-shrink:0;"></div>
     <a href="/interactive" class="collection-tab active">Interactive</a>
     <a href="/video" class="collection-tab">Video</a>
   </div>
