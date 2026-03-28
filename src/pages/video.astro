@@ -56,21 +56,23 @@ const videos = [
 
 <BaseLayout title="Video Art" currentPath="/video">
 
-  <section class="video-hero">
-    <div class="video-hero-content">
-      <div class="hero-eyebrow">Video · Motion · Process</div>
-      <h1 class="hero-title">
-        Things that <em>breathe.</em>
-      </h1>
-      <p class="hero-body">AI-generated horror, generative art recordings, and process videos from the studio. Best viewed with sound.</p>
-    </div>
-  </section>
+  <!-- COLLECTION NAV -->
+  <div class="collection-nav" style="margin-top: var(--header-offset);">
+    <a href="/" class="collection-tab">Gallery</a>
+    <a href="/interactive" class="collection-tab">Interactive</a>
+    <a href="/video" class="collection-tab active">Video</a>
+  </div>
 
-  <section class="video-section" id="video">
-    <div class="video-grid">
+  <!-- GALLERY -->
+  <section class="gallery-section" id="video">
+    <div class="gallery-header">
+      <h2 class="gallery-title">Video <em>Art</em></h2>
+      <span class="gallery-meta">Tap to play · Best with sound</span>
+    </div>
+    <div class="gallery-grid">
       {videos.map(v => (
-        <div class="video-card">
-          <div class="video-card-player">
+        <div class="art-card video-card-wrap">
+          <div class="video-player">
             <video
               src={`/video/${v.slug}.mp4`}
               poster={`/video/${v.slug}-poster.jpg`}
@@ -80,12 +82,13 @@ const videos = [
               playsinline
               onclick="this.paused ? this.play() : this.pause()"
             />
-            <div class="video-card-play-hint">Tap to play</div>
+            <div class="video-play-hint">Tap to play</div>
           </div>
-          <div class="video-card-info">
-            <h2 class="video-card-title">{v.title}</h2>
-            <div class="video-card-meta">{v.medium} · {v.year}</div>
-            <p class="video-card-desc">{v.desc}</p>
+          <div class="art-card-info" style="opacity: 1; transform: none; position: relative;">
+            <div class="art-card-title">{v.title}</div>
+            <div class="art-card-meta">
+              <span>{v.medium} · {v.year}</span>
+            </div>
           </div>
         </div>
       ))}
@@ -95,44 +98,24 @@ const videos = [
 </BaseLayout>
 
 <script is:inline>
-  document.querySelectorAll('.video-card video').forEach(video => {
-    const hint = video.parentElement.querySelector('.video-card-play-hint');
+  document.querySelectorAll('.video-card-wrap video').forEach(video => {
+    const hint = video.parentElement.querySelector('.video-play-hint');
     video.addEventListener('play', () => { if (hint) hint.style.opacity = '0'; });
     video.addEventListener('pause', () => { if (hint) hint.style.opacity = '1'; });
   });
 </script>
 
 <style>
-  .video-hero {
-    padding: calc(var(--header-offset) + 4rem) 3rem 4rem;
-    border-bottom: 1px solid rgba(80,72,64,0.2);
-  }
-  .video-hero-content { max-width: 600px; }
-
-  .video-section { padding: 4rem 3rem; }
-
-  .video-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 2rem;
-  }
-
-  .video-card {
-    background: var(--surface);
-    overflow: hidden;
-  }
-
-  .video-card-player {
+  .video-player {
     position: relative;
     cursor: pointer;
     background: #000;
   }
-  .video-card-player video {
+  .video-player video {
     width: 100%;
     display: block;
   }
-
-  .video-card-play-hint {
+  .video-play-hint {
     position: absolute;
     bottom: 1rem; left: 50%;
     transform: translateX(-50%);
@@ -148,35 +131,7 @@ const videos = [
     pointer-events: none;
     transition: opacity 0.3s;
   }
-
-  .video-card-info { padding: 1.5rem; }
-
-  .video-card-title {
-    font-family: var(--font-display);
-    font-size: 1.4rem;
-    font-weight: 300;
-    margin-bottom: 0.3rem;
-  }
-
-  .video-card-meta {
-    font-family: var(--font-mono);
-    font-size: 0.55rem;
-    color: var(--teal-light);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 0.8rem;
-  }
-
-  .video-card-desc {
-    font-size: 0.9rem;
-    font-weight: 300;
-    color: var(--ink-mid);
-    line-height: 1.7;
-  }
-
-  @media (max-width: 600px) {
-    .video-hero { padding: calc(var(--header-offset) + 2rem) 1.5rem 2rem; }
-    .video-section { padding: 2rem 1.5rem; }
-    .video-grid { grid-template-columns: 1fr; }
+  .video-card-wrap .art-card-info {
+    padding: 1rem 0.5rem;
   }
 </style>
