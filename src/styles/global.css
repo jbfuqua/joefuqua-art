@@ -243,6 +243,17 @@ header {
   transition: color 0.3s; background: none; border: none;
 }
 .lightbox-close:hover { color: var(--ember); }
+.lightbox-prev, .lightbox-next {
+  position: fixed; top: 50%; z-index: 501;
+  font-family: var(--font-mono); font-size: 0.65rem;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--ink-faint); cursor: pointer;
+  background: none; border: none; padding: 1rem;
+  transition: color 0.3s; transform: translateY(-50%);
+}
+.lightbox-prev { left: 1.5rem; }
+.lightbox-next { right: 1.5rem; }
+.lightbox-prev:hover, .lightbox-next:hover { color: var(--ember); }
 .lightbox-inner { max-width: 900px; margin: 6rem auto; padding: 2rem; }
 .lightbox-img { max-width: 100%; max-height: 70vh; object-fit: contain; display: block; margin: 0 auto; }
 .lightbox-info { padding: 2rem; text-align: center; }

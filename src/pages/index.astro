@@ -36,7 +36,7 @@ const ogImageSrc = getImage(catalog.find(a => a.slug === 'geisha')!).src;
         Made by algorithm.<br/>
         <em>Made by whatever lives between.</em>
       </h1>
-      <p class="hero-body">Watercolor impressionism. Digital charcoal. AI-generated weird visual art. And the space between — where digital becomes physical through ink, gel, and paint.</p>
+      <p class="hero-body">Watercolor impressionism. Digital charcoal. AI-generated horror. Generative particle systems. And the space between — where digital becomes physical through ink, gel, and paint.</p>
       <div class="hero-actions">
         <a href="#gallery" class="btn-primary">View Gallery</a>
         <a href="mailto:joe@joefuqua.blog" class="btn-ghost">Inquire About Prints</a>
@@ -62,8 +62,8 @@ const ogImageSrc = getImage(catalog.find(a => a.slug === 'geisha')!).src;
       Multimedia<span class="collection-count">{counts.multimedia}</span>
     </a>
     <div class="nav-divider" style="width:1px;height:16px;background:var(--ink-faint);opacity:0.4;align-self:center;flex-shrink:0;"></div>
-    <a href="/interactive" class="collection-tab">Interactive</a>
-    <a href="/video" class="collection-tab">Video</a>
+    <a href="/interactive" class="collection-tab collection-link">Interactive</a>
+    <a href="/video" class="collection-tab collection-link">Video</a>
   </div>
 
   <!-- GALLERY -->
@@ -105,6 +105,8 @@ const ogImageSrc = getImage(catalog.find(a => a.slug === 'geisha')!).src;
   <!-- LIGHTBOX -->
   <div class="lightbox-overlay" id="lightbox">
     <button class="lightbox-close" onclick="closeLightbox()">✕ Close</button>
+    <button class="lightbox-prev" onclick="navLightbox(-1)">&#8592; Prev</button>
+    <button class="lightbox-next" onclick="navLightbox(1)">Next &#8594;</button>
     <div class="lightbox-inner">
       {catalog.map(artwork => (
         <div class="lightbox-item" id={`lb-${artwork.slug}`} style="display:none;">
@@ -156,6 +158,7 @@ const ogImageSrc = getImage(catalog.find(a => a.slug === 'geisha')!).src;
   }
 
   document.querySelectorAll('.collection-tab').forEach(tab => {
+    if (tab.classList.contains('collection-link')) return; // let these navigate normally
     tab.addEventListener('click', e => {
       e.preventDefault();
       filterCollection(tab.dataset.col, true);
@@ -179,6 +182,12 @@ const ogImageSrc = getImage(catalog.find(a => a.slug === 'geisha')!).src;
   // Lightbox
   const slugs = Array.from(document.querySelectorAll('.art-card')).map(c => c.dataset.slug);
 
+  let currentLightboxSlug = null;
+
+  function getVisibleSlugs() {
+    return Array.from(document.querySelectorAll('.art-card:not(.hidden)')).map(c => c.dataset.slug);
+  }
+
   function openLightbox(slug) {
     slugs.forEach(s => {
       const el = document.getElementById('lb-' + s);
@@ -186,6 +195,7 @@ const ogImageSrc = getImage(catalog.find(a => a.slug === 'geisha')!).src;
     });
     const target = document.getElementById('lb-' + slug);
     if (target) target.style.display = 'block';
+    currentLightboxSlug = slug;
     document.getElementById('lightbox').classList.add('active');
     document.body.style.overflow = 'hidden';
   }
@@ -193,6 +203,16 @@ const ogImageSrc = getImage(catalog.find(a => a.slug === 'geisha')!).src;
   function closeLightbox() {
     document.getElementById('lightbox').classList.remove('active');
     document.body.style.overflow = '';
+    currentLightboxSlug = null;
+  }
+
+  function navLightbox(dir) {
+    if (!currentLightboxSlug) return;
+    const visible = getVisibleSlugs();
+    const idx = visible.indexOf(currentLightboxSlug);
+    if (idx === -1) return;
+    const next = (idx + dir + visible.length) % visible.length;
+    openLightbox(visible[next]);
   }
 
   document.getElementById('lightbox').addEventListener('click', function(e) {
@@ -201,6 +221,8 @@ const ogImageSrc = getImage(catalog.find(a => a.slug === 'geisha')!).src;
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') navLightbox(1);
+    if (e.key === 'ArrowLeft') navLightbox(-1);
   });
 </script>
 
